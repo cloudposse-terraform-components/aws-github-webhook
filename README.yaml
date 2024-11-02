@@ -1,70 +1,114 @@
-name: "template"
-
+name: "aws-github-webhook"
 # Canonical GitHub repo
-github_repo: "cloudposse-terraform-components/template"
-
+github_repo: "cloudposse-terraform-components/aws-github-webhook"
 # Short description of this project
 description: |-
-  Description of this component
+  This component provisions a GitHub webhook for a single GitHub repository.
 
-usage: |-
-  **Stack Level**: Regional or Test47
+  You may want to use this component if you are provisioning webhooks for multiple ArgoCD deployment repositories across
+  GitHub organizations.
 
-  Here's an example snippet for how to use this component.
-  
+  ## Usage
+
+  **Stack Level**: Regional
+
+  Here's an example snippet for how to use this component. This example pulls the value of the webhook from `remote-state`
+
   ```yaml
   components:
     terraform:
-      foo:
+      webhook/cloudposse/argocd:
+        metadata:
+          component: github-webhook
         vars:
-          enabled: true
+          github_organization: cloudposse
+          github_repository: argocd-deploy-non-prod
+          webhook_url: "https://argocd.ue2.dev.plat.cloudposse.org/api/webhook"
+
+          remote_state_github_webhook_enabled: true # default value added for visibility
+          remote_state_component_name: eks/argocd
   ```
 
+  ### SSM Stored Value Example
+
+  Here's an example snippet for how to use this component with a value stored in SSM
+
+  ```yaml
+  components:
+    terraform:
+      webhook/cloudposse/argocd:
+        metadata:
+          component: github-webhook
+        vars:
+          github_organization: cloudposse
+          github_repository: argocd-deploy-non-prod
+          webhook_url: "https://argocd.ue2.dev.plat.cloudposse.org/api/webhook"
+
+          remote_state_github_webhook_enabled: false
+          ssm_github_webhook_enabled: true
+          ssm_github_webhook: "/argocd/github/webhook"
+  ```
+
+  ### Input Value Example
+
+  Here's an example snippet for how to use this component with a value stored in Terraform variables.
+
+  ```yaml
+  components:
+    terraform:
+      webhook/cloudposse/argocd:
+        metadata:
+          component: github-webhook
+        vars:
+          github_organization: cloudposse
+          github_repository: argocd-deploy-non-prod
+          webhook_url: "https://argocd.ue2.dev.plat.cloudposse.org/api/webhook"
+
+          remote_state_github_webhook_enabled: false
+          ssm_github_webhook_enabled: false
+          webhook_github_secret: "abcdefg"
+  ```
+
+  ### ArgoCD Webhooks
+
+  For usage with the `eks/argocd` component, see
+  [Creating Webhooks with `github-webhook`](https://github.com/cloudposse/terraform-aws-components/blob/main/modules/eks/argocd/README.md#creating-webhooks-with-github-webhook)
+  in that component's README.
+
+  <!-- prettier-ignore-start -->
+
+  <!-- prettier-ignore-end -->
+
+  ## References
+
+  - [cloudposse/terraform-aws-components](https://github.com/cloudposse/terraform-aws-components) - Cloud Posse's upstream
+    components
 include:
   - "docs/terraform.md"
-
 tags:
-  - terraform
-  - terraform-modules
-  - aws
-  - components
-  - terraform-components
-  - root
-  - geodesic
-  - reference-implementation
-  - reference-architecture
-
+  - component/github-webhook
+  - layer/software-delivery
+  - provider/aws
 # Categories of this project
 categories:
-  - terraform-modules/root
-  - terraform-components
-
+  - component/github-webhook
+  - layer/software-delivery
+  - provider/aws
 # License of this project
 license: "APACHE2"
-
 # Badges to display
 badges:
-  - name: "Latest Release"
-    image: "https://img.shields.io/github/release/cloudposse-terraform-components/template.svg?style=for-the-badge"
-    url: "https://github.com/cloudposse-terraform-components/template/releases/latest"
-  - name: "Slack Community"
-    image: "https://slack.cloudposse.com/for-the-badge.svg"
-    url: "https://slack.cloudposse.com"
-
-references:
-  - name: "Cloud Posse Documentation"
-    description: "Complete documentation for the Cloud Posse solution"
-    url: "https://docs.cloudposse.com"
-  - name: "Reference Architectures"
-    description: "Launch effortlessly with our turnkey reference architectures, built either by your team or ours."
-    url: "https://cloudposse.com/"
-
+  - name: Latest Release
+    image: https://img.shields.io/github/release/cloudposse-terraform-components/aws-github-webhook.svg?style=for-the-badge
+    url: https://github.com/cloudposse-terraform-components/aws-github-webhook/releases/latest
+  - name: Slack Community
+    image: https://slack.cloudposse.com/for-the-badge.svg
+    url: https://slack.cloudposse.com
 related:
-- name: "Cloud Posse Terraform Modules"
-  description: Our collection of reusable Terraform modules used by our reference architectures.
-  url: "https://docs.cloudposse.com/modules/"
-- name: "Atmos"
-  description: "Atmos is like docker-compose but for your infrastructure"
-  url: "https://atmos.tools"
-
+  - name: "Cloud Posse Terraform Modules"
+    description: Our collection of reusable Terraform modules used by our reference architectures.
+    url: "https://docs.cloudposse.com/modules/"
+  - name: "Atmos"
+    description: "Atmos is like docker-compose but for your infrastructure"
+    url: "https://atmos.tools"
 contributors: [] # If included generates contribs
