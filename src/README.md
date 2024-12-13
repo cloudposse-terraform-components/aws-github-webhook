@@ -5,7 +5,7 @@ tags:
   - provider/aws
 ---
 
-# Component: `github`
+# Component: `github-webhook`
 
 This component provisions a GitHub webhook for a single GitHub repository.
 
