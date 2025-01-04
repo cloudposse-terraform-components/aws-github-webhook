@@ -5,5 +5,3 @@ repository:
   description: This component provisions a GitHub webhook for a single GitHub repository
   homepage: https://cloudposse.com/accelerate
   topics: terraform, terraform-component
-
-
